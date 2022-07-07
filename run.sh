@@ -12,7 +12,7 @@ cd $dir
 npm init -y
 
 # install typescript
-npm install typescript --save-dev
+npm install typescript nodemon --save-dev
 
 # generate tsconfig.json
 npx tsc --init --rootDir src --outDir build \
@@ -63,5 +63,8 @@ cp $cwd/app.ts src/
 cat package.json | \
   jq '.scripts.build="tsc --build"' | \
   jq '.scripts.start="node ."' | \
+  jq '.scripts."build-watch"="tsc --build -w"' | \
+  jq '.scripts."start-watch"="nodemon --nolazy --inspect ."' | \
+  jq '.scripts.watch="npm run build-watch & npm run start-watch"' | \
   jq '.main="build/server.js"' > package.json.tmp
 mv package.json.tmp package.json
